@@ -5,19 +5,10 @@ class Embed {
 		this.source = data.source
 		this.width 	= data.width
 		this.height = data.height
-		this.iframeOptions = `
-							frameborder="0" 
-							webkitallowfullscreen 
-							mozallowfullscreen 
-							allowfullscreen
-							scrolling="no"`
 	}
 
-	['embedParser']() {
-		let source = this.source
-		let id	   = this.id
-
-		switch(source) {
+	embedParser() {
+		switch(this.source) {
 			//For Security
 			case 'youtube':
 			case 'dailymotion':
@@ -26,92 +17,86 @@ class Embed {
 			case 'soundcloud':
 			case 'vimeo':
 			case 'metacafe':
-				return this[source](id)
+				return this[this.source](this.id)
 			default:
 				throw 'There is no such source'
-
 		}
 	}
 
+	iframe({src, width, height}) {
+		return  `
+		<iframe width="${width}" height="${height}" 
+		src="${src}" frameborder="0" webkitallowfullscreen 
+		mozallowfullscreen allowfullscreen scrolling="no"></iframe>`
+	}
+
 	['youtube'](sourceID) {
-		let videoembed = `
-			<iframe width="${this.width}" height="${this.height}" 
-			src="https://www.youtube.com/embed/${sourceID}?ecver=1" 
-			${this.iframeOptions}></iframe>`
-		
-		return videoembed
+		return this.iframe({
+			src: `https://www.youtube.com/embed/${sourceID}?ecver=1`,
+			width: this.width,
+			height: this.height
+			})
 	}
 
 	['facebook'](sourceID) {
-		let videoembed = `
-			<iframe src="http://www.facebook.com/video/embed?video_id=${sourceID}" 
-			width="${this.width}" height="${this.height}" ${this.iframeOptions}>`
-		
-		return videoembed
+		return this.iframe({
+			src: `http://www.facebook.com/video/embed?video_id=${sourceID}`,
+			width: this.width,
+			height: this.height
+			})
 	}
 
 	['instagram'](sourceID) {
-		let videoembed = `
-			<iframe 
-			width="${this.width}" 
-			height="${this.height}" 
-			src="http://instagram.com/p/${sourceID}/embed" 
-			${this.iframeOptions}></iframe>`
-		
-		return videoembed
+		return this.iframe({
+			src: `http://instagram.com/p/${sourceID}/embed`,
+			width: this.width,
+			height: this.height
+			})
 	}
 
 	['soundcloud'](sourceID) {
-		let videoembed = `
-			<iframe 
-			width="${this.width}" 
-			height="${this.height}" 
-			src="https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/${sourceID}&color=0066c" 
-			${this.iframeOptions}></iframe>`
-		
-		return videoembed
+		return this.iframe({
+			src: `https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/${sourceID}&color=0066c`,
+			width: this.width,
+			height: this.height
+			})
 	}
 
 	['vimeo'](sourceID) {
-		let videoembed = `
-			<iframe 
-			src="https://player.vimeo.com/video/${sourceID}?title=0&byline=0&portrait=0& 
-			width="${this.width}" 
-			height="${this.height}" 
-			${this.iframeOptions}></iframe>`
-		
-		return videoembed
+		return this.iframe({
+			src: `https://player.vimeo.com/video/${sourceID}?title=0&byline=0&portrait=0`,
+			width: this.width,
+			height: this.height
+			})
 	}
 
 	['dailymotion'](sourceID) {
-		let videoembed = `
-		<iframe width="${this.width}" height="${this.height}" 
-		src="//www.dailymotion.com/embed/video/${sourceID}" ${this.iframeOptions}>
-		</iframe>`
-
-		return videoembed
+		return this.iframe({
+			src: `//www.dailymotion.com/embed/video/${sourceID}`,
+			width: this.width,
+			height: this.height
+			})
 	}
 
 	['metacafe'](sourceID) {
-		let videoembed = `
-		<iframe width="${this.width}" height="${this.height}" 
-		src="http://www.metacafe.com/embed/${sourceID}/" 
-		${this.iframeOptions}></iframe>`
-
-		return videoembed
+		return this.iframe({
+			src: `http://www.metacafe.com/embed/${sourceID}/`,
+			width: this.width,
+			height: this.height
+			})
 	}
 
 	run() {	
 		let videoArea = document.querySelector(this.target)
 
 		if(videoArea) {
-			videoArea.innerHTML = this['embedParser']()
+			videoArea.innerHTML = this.embedParser()
 		} else {
 			throw 'Target is not found'
 		}
 	}
 
 	getEmbedCode() {
-		return this['embedParser']()
+		return this.embedParser()
 	}
 }
