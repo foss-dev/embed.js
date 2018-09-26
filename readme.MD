@@ -18,17 +18,15 @@ Initialize Embed class and call run method
 
 ### Params:
 
-	- el: ID field => // Like: YOUTUBE_ID
 	- target: Embed content shown will be in this area
-	- source: short name for platforms:
-		- yt => youtube
-		- dm => dailymotion
-		- fb => facebook
-		- ins => instagram
-		- sc => soundcloud
-		- vi => vimeo
-		- mc => metacafe
-	- event: Optional (default paste (onpaste)). After paste ID, embed content will be show
+	- source: name for platforms:
+		- youtube
+		- dailymotion
+		- facebook
+		- instagram
+		- soundcloud
+		- vimeo
+		- metacafe
 	- width: Optional: (default: 500)
 	- height: Optional (default: 315)
 
@@ -36,9 +34,9 @@ Initialize Embed class and call run method
 
 ```js
 var embed = new Embed({
-	el: '.video_url',
+	id: 'wZZ7oFKsKzY',
 	target: '.video_container',
-	source: 'vi',
+	source: 'youtube',
 	width: 600,
 	height: 600
 })
