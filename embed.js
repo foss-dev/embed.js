@@ -7,96 +7,70 @@ class Embed {
 		this.height = data.height
 	}
 
-	embedParser() {
+	getEmbed() {
 		switch(this.source) {
-			//For Security
 			case 'youtube':
+				return this.createEmbed({
+					src: `https://www.youtube.com/embed/${this.id}?ecver=1`
+				})
+
 			case 'dailymotion':
+				return this.createEmbed({
+					src: `https://www.dailymotion.com/embed/video/${this.id}`
+				})
+
 			case 'facebook':
+				return this.createEmbed({
+					src: `http://www.facebook.com/video/embed?video_id=${this.id}`
+				})
+
 			case 'instagram':
+				return this.createEmbed({
+					src: `http://instagram.com/p/${this.id}/embed`
+				})
+
 			case 'soundcloud':
+				return this.createEmbed({
+					src: `https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/${this.id}&color=0066c`
+				})
+
 			case 'vimeo':
+				return this.createEmbed({
+					src: `https://player.vimeo.com/video/${this.id}?title=0&byline=0&portrait=0`
+				})
+
 			case 'metacafe':
-				return this[this.source](this.id)
+				return this.createEmbed({
+					src: `http://www.metacafe.com/embed/${this.id}/`
+				})
+
 			default:
 				throw 'There is no such source'
 		}
 	}
 
-	iframe({src, width, height}) {
-		return  `
-		<iframe width="${width}" height="${height}" 
-		src="${src}" frameborder="0" webkitallowfullscreen 
-		mozallowfullscreen allowfullscreen scrolling="no"></iframe>`
-	}
+	createEmbed({src, width = this.width, height = this.height}) {
+		let iframe = document.createElement('iframe')
+			iframe.src = src
+			iframe.width = width
+			iframe.height = height
+			iframe.frameBorder = 0
+			iframe.scrolling = 'no'
 
-	['youtube'](sourceID) {
-		return this.iframe({
-			src: `https://www.youtube.com/embed/${sourceID}?ecver=1`,
-			width: this.width,
-			height: this.height
-			})
-	}
+			iframe.setAttribute('webkitallowfullscreen', '')
+			iframe.setAttribute('mozallowfullscreen', '')
+			iframe.setAttribute('allowfullscreen', '')
 
-	['facebook'](sourceID) {
-		return this.iframe({
-			src: `http://www.facebook.com/video/embed?video_id=${sourceID}`,
-			width: this.width,
-			height: this.height
-			})
-	}
-
-	['instagram'](sourceID) {
-		return this.iframe({
-			src: `http://instagram.com/p/${sourceID}/embed`,
-			width: this.width,
-			height: this.height
-			})
-	}
-
-	['soundcloud'](sourceID) {
-		return this.iframe({
-			src: `https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/${sourceID}&color=0066c`,
-			width: this.width,
-			height: this.height
-			})
-	}
-
-	['vimeo'](sourceID) {
-		return this.iframe({
-			src: `https://player.vimeo.com/video/${sourceID}?title=0&byline=0&portrait=0`,
-			width: this.width,
-			height: this.height
-			})
-	}
-
-	['dailymotion'](sourceID) {
-		return this.iframe({
-			src: `//www.dailymotion.com/embed/video/${sourceID}`,
-			width: this.width,
-			height: this.height
-			})
-	}
-
-	['metacafe'](sourceID) {
-		return this.iframe({
-			src: `http://www.metacafe.com/embed/${sourceID}/`,
-			width: this.width,
-			height: this.height
-			})
+		return iframe
 	}
 
 	run() {	
 		let videoArea = document.querySelector(this.target)
 
 		if(videoArea) {
-			videoArea.innerHTML = this.embedParser()
+			videoArea.appendChild(this.getEmbed())
 		} else {
 			throw 'Target is not found'
 		}
-	}
-
-	getEmbedCode() {
-		return this.embedParser()
 	}
 }
