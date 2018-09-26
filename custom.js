@@ -1,7 +1,7 @@
 var embed = new Embed({
-	el: '.video_url',
+	id: 'wZZ7oFKsKzY',
 	target: '.video_container',
-	source: 'yt',
+	source: 'youtube',
 	width: 600,
 	height: 600
 })
