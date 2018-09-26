@@ -36,9 +36,9 @@ Initialize Embed class and call run method
 
 ```js
 var embed = new Embed({
-	el: '.video_url',
+	id: 'wZZ7oFKsKzY',
 	target: '.video_container',
-	source: 'vi',
+	source: 'youtube',
 	width: 600,
 	height: 600
 })
